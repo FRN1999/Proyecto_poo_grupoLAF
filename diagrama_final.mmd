@@ -1,0 +1,62 @@
+classDiagram
+    class RegistroAcceso {
+        +ubicacion: str
+        +disponible: bool
+        +RegistroAcceso(ubicacion, disponible=True)
+        +descripcion() str
+    }
+
+    class Recurso {
+        -_codigo: str
+        -_titulo: str
+        -_autor: str
+        -_anio: int
+        -_soporte: str
+        -_registros: list
+        +Recurso(codigo, titulo, autor, anio, soporte)
+        +codigo: str
+        +titulo: str
+        +autor: str
+        +anio: int
+        +soporte: str
+        +registrar_copia(ubicacion, disponible=True) RegistroAcceso
+        +ultimo_registro() RegistroAcceso
+        +obtener_detalle() str
+    }
+
+    class LibroImpreso {
+        +isbn: str
+        +LibroImpreso(codigo, titulo, autor, anio, isbn)
+        +obtener_detalle() str
+    }
+
+    class RecursoDigital {
+        +formato: str
+        +url: str
+        +RecursoDigital(codigo, titulo, autor, anio, formato, url="")
+        +obtener_detalle() str
+    }
+
+    class Bibliotecario {
+        +nombre: str
+        +Bibliotecario(nombre)
+    }
+
+    class SeccionBiblioteca {
+        +nombre: str
+        -_recursos: list
+        -_bibliotecario: Bibliotecario o None
+        +SeccionBiblioteca(nombre)
+        +bibliotecario: Bibliotecario
+        +asignar_bibliotecario(bibliotecario)
+        +agregar_recurso(recurso)
+        +total_recursos() int
+        +mostrar_estado()
+        +mostrar_catalogo_polimorfico()
+    }
+
+    Recurso <|-- LibroImpreso
+    Recurso <|-- RecursoDigital
+    Recurso "1" *-- "0..*" RegistroAcceso : composición
+    SeccionBiblioteca "1" o-- "0..*" Recurso : agregación
+    SeccionBiblioteca "1" --> "0..1" Bibliotecario : asociación
